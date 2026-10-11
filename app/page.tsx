@@ -189,7 +189,7 @@ export default function Home() {
             </div>
           </div>
           <span className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">
-            Early-access prototype
+            Prototype
           </span>
         </div>
       </header>
@@ -200,7 +200,7 @@ export default function Home() {
             Procurement monitoring
           </p>
           <h2 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
-            Don&apos;t miss a tender update.
+            Spot changes on a tender page.
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
             Track the Ministry of Planning tender page in this demo. Compare
@@ -375,7 +375,7 @@ export default function Home() {
         </div>
 
         <footer className="mt-10 border-t border-slate-200 py-6 text-sm text-slate-500">
-          TenderWatch · Early prototype
+          TenderWatch · Prototype
         </footer>
       </div>
     </main>
