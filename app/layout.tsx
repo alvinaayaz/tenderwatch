@@ -23,9 +23,7 @@ export const metadata: Metadata = {
   title: shareTitle,
   description: shareDescription,
   applicationName: "TenderWatch",
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: siteUrl,
@@ -33,38 +31,27 @@ export const metadata: Metadata = {
     title: shareTitle,
     description: shareDescription,
     locale: "en_US",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "TenderWatch — spot changes on a tender page",
-      },
-    ],
+    images: [{
+      url: "/og-image.png",
+      width: 1200,
+      height: 630,
+      alt: "TenderWatch — spot changes on a tender page",
+    }],
   },
   twitter: {
     card: "summary_large_image",
     title: shareTitle,
     description: shareDescription,
-    images: [
-      {
-        url: "/opengraph-image",
-        alt: "TenderWatch — spot changes on a tender page",
-      },
-    ],
+    images: [{ url: "/og-image.png", alt: "TenderWatch — spot changes on a tender page" }],
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>
