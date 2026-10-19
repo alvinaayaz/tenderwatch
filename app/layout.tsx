@@ -14,6 +14,7 @@ export const metadata = {
         url: 'https://tenderwatch-eta.vercel.app/og-image.png',
         width: 1200,
         height: 630,
+        type: 'image/png',
         alt: 'TenderWatch Preview',
       },
     ],
