@@ -12,3 +12,5 @@ out/
 app/page.backup.tsx
 app/page.before-launch-copy.tsx
 route.before-launch.*.ts
+.vercel
+.env*
