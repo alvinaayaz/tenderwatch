@@ -1,12 +1,21 @@
 import './globals.css';
 
 export const metadata = {
+  metadataBase: new URL('https://tenderwatch-eta.vercel.app'),
   title: 'TenderWatch | Tender Change Tracking',
   description: 'Spot changes on a tender page instantly.',
   openGraph: {
     title: 'TenderWatch',
-    description: 'Spot changes on a tender page.',
-    images: ['/og-image.png'],
+    description: 'Spot changes on a tender page instantly.',
+    url: 'https://tenderwatch-eta.vercel.app',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'TenderWatch Preview',
+      },
+    ],
   },
 };
 
