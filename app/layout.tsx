@@ -1,17 +1,19 @@
 import './globals.css';
 
+const description = 'TenderWatch is a procurement monitoring utility designed to track public tender pages, take baseline snapshot comparisons, and highlight potential document edits instantly.';
+
 export const metadata = {
   metadataBase: new URL('https://tenderwatch-eta.vercel.app'),
   title: 'TenderWatch | Tender Change Tracking',
-  description: 'Spot changes on a tender page instantly.',
+  description: description,
   openGraph: {
     title: 'TenderWatch | Tender Change Tracking',
-    description: 'Spot changes on a tender page instantly.',
+    description: description,
     url: 'https://tenderwatch-eta.vercel.app',
     siteName: 'TenderWatch',
     images: [
       {
-        url: 'https://tenderwatch-eta.vercel.app/og-image.png',
+        url: 'https://tenderwatch-eta.vercel.app/opengraph-image.png',
         width: 1200,
         height: 630,
         type: 'image/png',
@@ -23,8 +25,8 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'TenderWatch | Tender Change Tracking',
-    description: 'Spot changes on a tender page instantly.',
-    images: ['https://tenderwatch-eta.vercel.app/og-image.png'],
+    description: description,
+    images: ['https://tenderwatch-eta.vercel.app/opengraph-image.png'],
   },
 };
 
