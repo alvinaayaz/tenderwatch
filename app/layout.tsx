@@ -11,7 +11,7 @@ export const metadata = {
     siteName: 'TenderWatch',
     images: [
       {
-        url: 'https://tenderwatch-eta.vercel.app/og-image.png',
+        url: 'https://tenderwatch-eta.vercel.app/opengraph-image',
         width: 1200,
         height: 630,
         type: 'image/png',
@@ -24,7 +24,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'TenderWatch | Tender Change Tracking',
     description: 'Spot changes on a tender page instantly.',
-    images: ['https://tenderwatch-eta.vercel.app/og-image.png'],
+    images: ['https://tenderwatch-eta.vercel.app/opengraph-image'],
   },
 };
 
