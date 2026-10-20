@@ -13,7 +13,11 @@ export const metadata = {
     siteName: 'TenderWatch',
     images: [
       {
+<<<<<<< HEAD
         url: 'https://tenderwatch-eta.vercel.app/opengraph-image.png',
+=======
+        url: 'https://tenderwatch-eta.vercel.app/opengraph-image',
+>>>>>>> a6d399795cb77de614cc9fdb308ef0bae6b6fc42
         width: 1200,
         height: 630,
         type: 'image/png',
@@ -25,8 +29,13 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'TenderWatch | Tender Change Tracking',
+<<<<<<< HEAD
     description: description,
     images: ['https://tenderwatch-eta.vercel.app/opengraph-image.png'],
+=======
+    description: 'Spot changes on a tender page instantly.',
+    images: ['https://tenderwatch-eta.vercel.app/opengraph-image'],
+>>>>>>> a6d399795cb77de614cc9fdb308ef0bae6b6fc42
   },
 };
 

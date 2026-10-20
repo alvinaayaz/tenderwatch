@@ -189,11 +189,7 @@ export default function Home() {
             </div>
           </div>
           <span className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">
-<<<<<<< HEAD
             Early-access v1.0
-=======
-            Prototype
->>>>>>> 8758894ca7d8cfe6328fb4f38071d3985709c1a3
           </span>
         </div>
       </header>
@@ -379,11 +375,7 @@ export default function Home() {
         </div>
 
         <footer className="mt-10 border-t border-slate-200 py-6 text-sm text-slate-500">
-<<<<<<< HEAD
-          TenderWatch � Early v1.0
-=======
-          TenderWatch · Prototype
->>>>>>> 8758894ca7d8cfe6328fb4f38071d3985709c1a3
+          TenderWatch · Early v1.0
         </footer>
       </div>
     </main>
