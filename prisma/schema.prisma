@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum TenderStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+  AWARDED
+  UNKNOWN
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  READ
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String?
+  passwordHash    String?
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  memberships    Membership[]
+  createdTenders Tender[]       @relation("TenderCreator")
+  notifications  Notification[]
+  auditLogs      AuditLog[]     @relation("AuditActor")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships  Membership[]
+  tenders      Tender[]
+  subscription Subscription?
+  auditLogs    AuditLog[]
+}
+
+model Membership {
+  id             String         @id @default(cuid())
+  userId         String
+  organizationId String
+  role           MembershipRole @default(MEMBER)
+  createdAt      DateTime       @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId, role])
+}
+
+model TenderSource {
+  id          String   @id @default(cuid())
+  name        String
+  baseUrl     String
+  countryCode String?
+  adapterKey  String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenders Tender[]
+
+  @@unique([baseUrl, adapterKey])
+  @@index([countryCode, isActive])
+}
+
+model Tender {
+  id                    String       @id @default(cuid())
+  organizationId        String
+  sourceId              String?
+  createdById           String?
+  externalId            String?
+  title                 String
+  procuringOrganization String?
+  description           String?      @db.Text
+  sourceUrl             String
+  referenceNumber       String?
+  countryCode           String?
+  deadline              DateTime?
+  status                TenderStatus @default(UNKNOWN)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  source         TenderSource?    @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  createdBy      User?            @relation("TenderCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  snapshots      TenderSnapshot[]
+  changes        TenderChange[]
+  monitoringJobs MonitoringJob[]
+  notifications  Notification[]
+  documents      Document[]
+
+  @@unique([organizationId, sourceUrl])
+  @@index([organizationId, status])
+  @@index([organizationId, deadline])
+  @@index([sourceId, externalId])
+  @@index([countryCode, status])
+}
+
+model TenderSnapshot {
+  id          String   @id @default(cuid())
+  tenderId    String
+  fingerprint String
+  pageTitle   String?
+  contentText String?  @db.Text
+  preview     String?  @db.Text
+  checkedAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  tender      Tender         @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+  changesFrom TenderChange[] @relation("PreviousSnapshot")
+  changesTo   TenderChange[] @relation("CurrentSnapshot")
+
+  @@index([tenderId, checkedAt])
+  @@index([fingerprint])
+}
+
+model TenderChange {
+  id                 String   @id @default(cuid())
+  tenderId           String
+  previousSnapshotId String?
+  currentSnapshotId  String
+  changeType         String
+  summary            String?  @db.Text
+  evidence           Json?
+  detectedAt         DateTime @default(now())
+
+  tender           Tender          @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+  previousSnapshot TenderSnapshot? @relation("PreviousSnapshot", fields: [previousSnapshotId], references: [id], onDelete: SetNull)
+  currentSnapshot  TenderSnapshot  @relation("CurrentSnapshot", fields: [currentSnapshotId], references: [id], onDelete: Cascade)
+
+  @@index([tenderId, detectedAt])
+}
+
+model MonitoringJob {
+  id          String    @id @default(cuid())
+  tenderId    String
+  status      JobStatus @default(PENDING)
+  scheduledAt DateTime
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  attempts    Int       @default(0)
+  lastError   String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tender Tender @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+
+  @@index([status, scheduledAt])
+  @@index([tenderId, scheduledAt])
+}
+
+model Notification {
+  id        String             @id @default(cuid())
+  userId    String
+  tenderId  String?
+  type      String
+  channel   String
+  status    NotificationStatus @default(PENDING)
+  payload   Json?
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime           @default(now())
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tender Tender? @relation(fields: [tenderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status, createdAt])
+  @@index([tenderId, createdAt])
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  tenderId  String
+  fileName  String
+  objectKey String   @unique
+  mimeType  String?
+  sizeBytes BigInt?
+  checksum  String?
+  createdAt DateTime @default(now())
+
+  tender Tender @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+
+  @@index([tenderId, createdAt])
+}
+
+model Subscription {
+  id                     String    @id @default(cuid())
+  organizationId         String    @unique
+  provider               String?
+  providerCustomerId     String?   @unique
+  providerSubscriptionId String?   @unique
+  plan                   String    @default("FREE")
+  status                 String    @default("INACTIVE")
+  currentPeriodEnd       DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String?
+  actorUserId    String?
+  action         String
+  resourceType   String
+  resourceId     String?
+  details        Json?
+  createdAt      DateTime @default(now())
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  actor        User?         @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([resourceType, resourceId])
+}
+
+model AuthRateLimit {
+  key             String    @id
+  count           Int       @default(0)
+  windowStartedAt DateTime
+  blockedUntil    DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([updatedAt])
+  @@index([blockedUntil])
+}

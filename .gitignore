@@ -1,16 +1,17 @@
-﻿node_modules/
+node_modules/
 .next/
 out/
+.vercel/
+
 .env
 .env.*
 !.env.example
-.vercel/
+
 *.log
+*.tsbuildinfo
 .DS_Store
 
 # Local launch backups
 app/page.backup.tsx
 app/page.before-launch-copy.tsx
 route.before-launch.*.ts
-.vercel
-.env*
