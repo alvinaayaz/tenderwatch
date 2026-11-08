@@ -618,7 +618,7 @@ export default function Home() {
               <strong>Important:</strong> the first successful check establishes
               a baseline. Later checks compare page-text fingerprints. A
               difference means possible page changes, not necessarily a tender
-              amendment. Automatic scheduling and alerts are not implemented.
+              amendment. Automatic monitoring runs daily. Email alerts are not currently available.
             </p>
           </section>
         </div>
